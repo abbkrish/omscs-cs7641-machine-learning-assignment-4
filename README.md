@@ -3,7 +3,7 @@
 
 ## Update
 This is an updated version of code from Juan J. San Emeterio, amended by David D.
-You can build it with maven, and then run your grids. I've added one easy grid for example. Adjust the command for your environment (memory, testworld, max iters, max steps)
+You can build it with maven, and then run your grids. Adjust the command for your environment (memory, testworld, max iters, max steps)
 ```
 mvn package -DskipTests
 java -Xmx8192m -cp target/burlap-0.0.1-SNAPSHOT-jar-with-dependencies.jar burlap.assignment4.EasyGridWorldLauncher testworlds/easy.csv <max iterations> <max steps>
