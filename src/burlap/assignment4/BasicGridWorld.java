@@ -34,14 +34,17 @@ public class BasicGridWorld implements DomainGenerator {
 
 	// ordered so first dimension is x
 	protected int[][] map ;
-	protected static int mapx;
-	protected static int mapy;
-	
-	public BasicGridWorld(int[][] map,int mapx, int mapy){
+	protected static int goalx;
+	protected static int goaly;
+	protected static int agentx;
+	protected static int agenty;
+
+	public BasicGridWorld(int[][] map,int goalx, int goaly, int agentx, int agenty){
 		this.map = map;
-		this.mapx = mapx;
-		this.mapy = mapy;
-		
+		this.goalx = goalx;
+		this.goaly = goaly;
+		this.agentx = agentx;
+		this.agenty = agenty;
 	}
 
 
@@ -52,11 +55,11 @@ public class BasicGridWorld implements DomainGenerator {
 
 		Attribute xatt = new Attribute(domain, ATTX,
 				Attribute.AttributeType.INT);
-		xatt.setLims(0, mapx);
+		xatt.setLims(0, this.map.length - 1);
 
 		Attribute yatt = new Attribute(domain, ATTY,
 				Attribute.AttributeType.INT);
-		yatt.setLims(0, mapy);
+		yatt.setLims(0, map[0].length - 1);
 
 		ObjectClass agentClass = new ObjectClass(domain, CLASSAGENT);
 		agentClass.addAttribute(xatt);
@@ -76,17 +79,17 @@ public class BasicGridWorld implements DomainGenerator {
 		return domain;
 	}
 
-	public static State getExampleState(Domain domain) {
+	public State getExampleState(Domain domain) {
 		State s = new MutableState();
 		ObjectInstance agent = new MutableObjectInstance(
 				domain.getObjectClass(CLASSAGENT), "agent0");
-		agent.setValue(ATTX, 0);
-		agent.setValue(ATTY, 0);
+		agent.setValue(ATTX, this.agentx);
+		agent.setValue(ATTY, this.agenty);
 
 		ObjectInstance location = new MutableObjectInstance(
 				domain.getObjectClass(CLASSLOCATION), "location0");
-		location.setValue(ATTX, mapx);
-		location.setValue(ATTY, mapy);
+		location.setValue(ATTX, goalx);
+		location.setValue(ATTY, goaly);
 
 		s.addObject(agent);
 		s.addObject(location);

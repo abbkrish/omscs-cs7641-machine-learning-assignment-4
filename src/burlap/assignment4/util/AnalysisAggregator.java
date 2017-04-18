@@ -2,6 +2,9 @@ package burlap.assignment4.util;
 
 import burlap.oomdp.core.values.DoubleArrayValue;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,12 @@ public final class AnalysisAggregator {
 	private static List<Double> rewardsForValueIteration = new ArrayList<Double>();
 	private static List<Double> rewardsForPolicyIteration = new ArrayList<Double>();
 	private static List<Double> rewardsForQLearning = new ArrayList<Double>();
-	
+
+	private static List<Double> convergenceForValueIteration = new ArrayList<Double>();
+	private static List<Double> convergenceForPolicyIteration = new ArrayList<Double>();
+	private static List<Double> convergenceForQLearning = new ArrayList<Double>();
+	private static List<Double> epsilonDecayedForQLearning = new ArrayList<Double>();
+
 	public static void addNumberOfIterations(Integer numIterations1){
 		numIterations.add(numIterations1);
 	}
@@ -63,6 +71,18 @@ public final class AnalysisAggregator {
 	public static void addQLearningReward(double reward) {
 		rewardsForQLearning.add(reward);
 	}
+	public static void addValueIterationConvergence(double convergence) {
+		convergenceForValueIteration.add(convergence);
+	}
+	public static void addPolicyIterationConvergence(double convergence) {
+		convergenceForPolicyIteration.add(convergence);
+	}
+	public static void addQLearningConvergence(double convergence) {
+		convergenceForQLearning.add(convergence);
+	}
+	public static void addQLearningDecayedEpsilon(double decayedEpsilon) {
+		epsilonDecayedForQLearning.add(decayedEpsilon);
+	}
 	public static void printValueIterationTimeResults(){
 		System.out.print("Value Iteration,");	
 		printList(millisecondsToFinishValueIteration);
@@ -90,6 +110,21 @@ public final class AnalysisAggregator {
 	public static void printQLearningRewards(){
 		System.out.print("Q Learning Rewards,");
 		printDoubleList(rewardsForQLearning);
+	}
+
+	public static void printValueIterationConvergence() {
+		System.out.print("Value Iteration Convergence,");
+		printDoubleList(convergenceForValueIteration);
+	}
+
+	public static void printPolicyIterationConvergence() {
+		System.out.print("Policy Iteration Convergence,");
+		printDoubleList(convergenceForPolicyIteration);
+	}
+
+	public static void printQLearningConvergence() {
+		System.out.print("Q Learning Convergence,");
+		printDoubleList(convergenceForQLearning);
 	}
 
 	public static void printNumIterations(){
@@ -140,5 +175,72 @@ public final class AnalysisAggregator {
 		printValueIterationRewards();
 		printPolicyIterationRewards();
 		printQLearningRewards();
+	}
+
+	public static void writeValueIterationToCsv(String filename) {
+		writeToCsv(filename, numIterations, stepsToFinishValueIteration, millisecondsToFinishValueIteration, rewardsForValueIteration, convergenceForValueIteration);
+	}
+
+	public static void writePolicyIterationToCsv(String filename) {
+		writeToCsv(filename, numIterations, stepsToFinishPolicyIteration, millisecondsToFinishPolicyIteration, rewardsForPolicyIteration, convergenceForPolicyIteration);
+	}
+
+	public static void writeQLearningToCsv(String filename) {
+		writeToCsv(filename, numIterations, stepsToFinishQLearning, millisecondsToFinishQLearning, rewardsForQLearning, convergenceForQLearning, epsilonDecayedForQLearning);
+	}
+
+	public static void writeToCsv(
+		String filename,
+		List<Integer> iterations,
+		List<Integer> stepsToFinish,
+		List<Integer> millisecondsToFinish,
+		List<Double> rewards,
+		List<Double> convergence)
+	{
+		writeToCsv(filename, iterations, stepsToFinish, millisecondsToFinish, rewards, convergence, null);
+	}
+
+	public static void writeToCsv(
+		String filename,
+		List<Integer> iterations,
+		List<Integer> stepsToFinish,
+		List<Integer> millisecondsToFinish,
+		List<Double> rewards,
+		List<Double> convergence,
+		List<Double> epsilon)
+	{
+		try {
+			FileWriter fw = new FileWriter(filename);
+			PrintWriter pw = new PrintWriter(fw);
+
+			if (epsilon != null) {
+				pw.println("iteration,time,reward,steps,epsilon,convergence");
+			} else {
+				pw.println("iteration,time,reward,steps,convergence");
+			}
+			int size = numIterations.size();
+			for (int i = 0; i < size; i++) {
+				// "iteration,time,reward,steps,epsilon,convergence"
+				pw.print(String.valueOf(iterations.get(i)));
+				pw.print(",");
+				pw.print(String.valueOf(millisecondsToFinish.get(i)));
+				pw.print(",");
+				pw.print(String.valueOf(rewards.get(i)));
+				pw.print(",");
+				pw.print(String.valueOf(stepsToFinish.get(i)));
+				if (epsilon != null) {
+					pw.print(",");
+					pw.print(String.valueOf(epsilon.get(i)));
+				}
+				pw.print(",");
+				pw.println(String.valueOf(convergence.get(i)));
+			}
+
+			pw.flush();
+			pw.close();
+			fw.close();
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
 	}
 }

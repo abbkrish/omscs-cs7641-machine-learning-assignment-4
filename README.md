@@ -1,6 +1,15 @@
 # OMSCS: Machine Learning - Assignment 4 
 ## by Juan J. San Emeterio https://www.linkedin.com/in/juanjsanemeterio/
 
+## Update
+This is an updated version of code from Juan J. San Emeterio, amended by David D.
+You can build it with maven, and then run your grids. I've added one easy grid for example. Adjust the command for your environment (memory, testworld, max iters, max steps)
+```
+mvn package -DskipTests
+java -Xmx8192m -cp target/burlap-0.0.1-SNAPSHOT-jar-with-dependencies.jar burlap.assignment4.EasyGridWorldLauncher testworlds/easy.csv <max iterations> <max steps>
+
+```
+## Previous readme
 
 Greetings! The purpose of this readme file is to offer the reader the steps required to make use of this BURLAP machine learning package with several of my own custom classes (included) and Eclipse (not included). This readme is split by the different Markov Decision Processes that were required for completion of the assignment. The instructions below will assume that you have already successfully downloaded and opened Eclipse.
 

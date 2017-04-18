@@ -32,7 +32,10 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 	 * When the maximum change between policy evaluations is smaller than this value, planning will terminate.
 	 */
 	protected double												maxPIDelta;
-	
+
+	public double lastPIDelta = 0.;
+
+
 	/**
 	 * When the number of policy evaluation iterations exceeds this value, policy evaluation will terminate.
 	 */
@@ -176,12 +179,11 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 				iterations++;
 				this.evaluativePolicy = new GreedyQPolicy(this.getCopyOfValueFunction());
 			}while(delta > this.maxPIDelta && iterations < maxPolicyIterations);
-			
+			this.lastPIDelta = delta;
 		}
 
 		DPrint.cl(this.debugCode, "Total policy iterations: " + iterations);
 		this.totalPolicyIterations += iterations;
-
 		return (GreedyQPolicy)this.evaluativePolicy;
 
 	}
@@ -292,19 +294,11 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 						openList.offer(tsh);
 					}
 				}
-				
 			}
-			
-			
 		}
 		
 //		DPrint.cl(this.debugCode, "Finished reachability analysis; # states: " + mapToStateIndex.size());
-		
 		this.foundReachableStates = true;
-		
 		return true;
-		
 	}
-
-	
 }

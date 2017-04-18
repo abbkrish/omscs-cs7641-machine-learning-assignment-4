@@ -63,8 +63,8 @@ public class ValueIteration extends DynamicProgramming implements Planner {
 	
 	
 	protected boolean												hasRunVI = false;
-	
-	
+	public double													latestDelta = 0.;
+
 	/**
 	 * Initializers the valueFunction.
 	 * @param domain the domain in which to plan
@@ -151,9 +151,10 @@ public class ValueIteration extends DynamicProgramming implements Planner {
 				double v = this.value(sh);
 				double maxQ = this.performBellmanUpdateOn(sh);
 				delta = Math.max(Math.abs(maxQ - v), delta);
-				
 			}
-			
+
+			this.latestDelta = delta;
+
 			if(delta < this.maxDelta){
 				break; //approximated well enough; stop iterating
 			}
@@ -218,10 +219,7 @@ public class ValueIteration extends DynamicProgramming implements Planner {
 						openList.offer(tsh);
 					}
 				}
-				
 			}
-			
-			
 		}
 		
 //		DPrint.cl(this.debugCode, "Finished reachability analysis; # states: " + mapToStateIndex.size());
@@ -230,12 +228,5 @@ public class ValueIteration extends DynamicProgramming implements Planner {
 		this.hasRunVI = false;
 		
 		return true;
-		
 	}
-	
-	
-	
-
-	
-	
 }

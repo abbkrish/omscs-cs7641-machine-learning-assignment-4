@@ -106,7 +106,7 @@ public class QLearning extends MDPSolver implements QFunction, LearningAgent, Pl
 	/**
 	 * The maximum Q-value change that occurred in the last learning episode.
 	 */
-	protected double												maxQChangeInLastEpisode = Double.POSITIVE_INFINITY;
+	public double												maxQChangeInLastEpisode = Double.POSITIVE_INFINITY;
 	
 	
 	/**
