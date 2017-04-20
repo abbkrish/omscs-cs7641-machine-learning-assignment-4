@@ -9,6 +9,11 @@ mvn package -DskipTests
 java -Xmx8192m -cp target/burlap-0.0.1-SNAPSHOT-jar-with-dependencies.jar burlap.assignment4.EasyGridWorldLauncher testworlds/easy.csv <max iterations> <max steps>
 
 ```
+## Building gridworlds
+You can use basicgrid.html in a browser to build up new worlds, which you can cut and paste into a file.
+
+I've included the awesome original gridworld.html by Joshua Kaelin in case you want to expand past the basics.
+
 ## Previous readme
 
 Greetings! The purpose of this readme file is to offer the reader the steps required to make use of this BURLAP machine learning package with several of my own custom classes (included) and Eclipse (not included). This readme is split by the different Markov Decision Processes that were required for completion of the assignment. The instructions below will assume that you have already successfully downloaded and opened Eclipse.
