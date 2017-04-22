@@ -8,14 +8,10 @@ import burlap.oomdp.singleagent.RewardFunction;
 
 public class BasicRewardFunction implements RewardFunction {
 
-	int goalX;
-	int goalY;
-	double reward;
+	GridMap gridMap;
 
-	public BasicRewardFunction(int goalX, int goalY, double reward) {
-		this.goalX = goalX;
-		this.goalY = goalY;
-		this.reward = reward;
+	public BasicRewardFunction(GridMap gridMap) {
+		this.gridMap = gridMap;
 	}
 
 	@Override
@@ -27,8 +23,8 @@ public class BasicRewardFunction implements RewardFunction {
 		int ay = agent.getIntValForAttribute(BasicGridWorld.ATTY);
 
 		// are they at goal location?
-		if (ax == this.goalX && ay == this.goalY) {
-			return this.reward;
+		if (this.gridMap.getMap()[ax][ay] == GridMap.GOOD_END_POSITION) {
+			return this.gridMap.getSize()*2;
 		}
 
 		return -1;

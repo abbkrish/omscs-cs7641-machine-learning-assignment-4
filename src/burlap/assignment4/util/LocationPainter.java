@@ -46,7 +46,7 @@ public class LocationPainter implements ObjectPainter {
 		//paint the rectangle
 		g2.fill(new Rectangle2D.Float(rx, ry, width, height));
 
-
+		System.out.println("ax,ay = " + ax + "," + ay + " --> rx,ry = " + rx + "," + ry);
 	}
 	
 
