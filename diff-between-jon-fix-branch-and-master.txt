@@ -165,3 +165,20 @@ index a5b90e9..a96b438 100644
 +
 +	
  }
+diff --git a/src/burlap/assignment4/util/AnalysisRunner.java b/src/burlap/assignment4/util/AnalysisRunner.java
+index 1880a00..d58692d 100644
+--- a/src/burlap/assignment4/util/AnalysisRunner.java
++++ b/src/burlap/assignment4/util/AnalysisRunner.java
+@@ -98,7 +98,10 @@ public class AnalysisRunner {
+                                        0.99,
+                                        hashingFactory,
+                                        0.001,
+-                                       1,
++                                       //1,^M
++                                       20, // If you look at the older code, the second last arg to the^M
++                                       // constructor of policy iteration is set to 1. It really ought to be 10 or 20 in^M
++                                       // the literature -- jontay ( alyssa -- changing this to 20)^M
+                                        numIterations);
+        
+                        // run planning from our initial state
+
