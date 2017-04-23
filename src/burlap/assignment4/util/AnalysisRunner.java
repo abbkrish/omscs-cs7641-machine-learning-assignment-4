@@ -55,11 +55,11 @@ public class AnalysisRunner {
 					domain,
 					rf,
 					tf,
-					0.99,
+					0.99, // gamma
 					hashingFactory,
-					-1, numIterations); //Added a very high delta number in order to guarantee that value iteration occurs the max number of iterations
-										   //for comparison with the other algorithms.
-	
+					0.001, // max delta
+					numIterations);
+
 			// run planning from our initial state
 			p = vi.planFromState(initialState);
 			AnalysisAggregator.addMillisecondsToFinishValueIteration((int) (System.nanoTime()-startTime)/1000000);
@@ -95,9 +95,9 @@ public class AnalysisRunner {
 					domain,
 					rf,
 					tf,
-					0.99,
+					0.99, // gamma
 					hashingFactory,
-					-1,
+					0.001, // max delta
 					20, //If you look at the older code, the second last arg to the
 					// constructor of policy iteration is set to 1. It really ought to be 10 or 20 in
 					// the literature -- jontay ( alyssa -- changing this to 20)
@@ -195,7 +195,7 @@ public class AnalysisRunner {
 				tf,
 				0.99,
 				new SimpleHashableStateFactory(),
-				.5, 100);
+				.001, 100);
 		vi.planFromState(initialState);
 
 		return vi.getAllStates();
