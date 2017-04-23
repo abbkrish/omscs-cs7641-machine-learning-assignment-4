@@ -98,7 +98,10 @@ public class AnalysisRunner {
 					0.99,
 					hashingFactory,
 					0.001,
-					1,
+					//1,
+					20, // If you look at the older code, the second last arg to the
+					// constructor of policy iteration is set to 1. It really ought to be 10 or 20 in
+					// the literature -- jontay ( alyssa -- changing this to 20)
 					numIterations);
 	
 			// run planning from our initial state

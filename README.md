@@ -14,6 +14,16 @@ You can use basicgrid.html in a browser to build up new worlds, which you can cu
 
 I've included the awesome original gridworld.html by Joshua Kaelin in case you want to expand past the basics.
 
+## Jon's/Wes' Fix
+This should fix Policy Iteration
+
+jontay -- "Yes. Pi should be faster.
+          My java source sets it up so that vi slows down a bit more as well
+          Not sure if it's calling it from jython that's the problem or if the burlap pi is a bit slower than it should be, but I had to do it to get vi doesn't win all the time."
+
+## Parameters
+You should tweak parameters in assignment4.util.AnalysisRunner and assignment4.EasyGridWorldLauncher, and maybe in assignment4.util.BasicRewardFunction. -- alyssa
+
 ## Previous readme
 
 Greetings! The purpose of this readme file is to offer the reader the steps required to make use of this BURLAP machine learning package with several of my own custom classes (included) and Eclipse (not included). This readme is split by the different Markov Decision Processes that were required for completion of the assignment. The instructions below will assume that you have already successfully downloaded and opened Eclipse.
