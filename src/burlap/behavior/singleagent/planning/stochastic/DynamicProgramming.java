@@ -393,10 +393,14 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			List<ActionTransitions> transitions = this.getActionsTransitions(sh);
 			for(ActionTransitions at : transitions){
 				double q = this.computeQ(sh.s, at);
+				q = this.computeQ(sh.s, at);
+				q = this.computeQ(sh.s, at);
+				q = this.computeQ(sh.s, at);
+				q = this.computeQ(sh.s, at);
 				if(q > maxQ){
 					maxQ = q;
-				}
-			}
+				}				
+			}			
 			
 		}
 		else{
@@ -405,6 +409,10 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			List<GroundedAction> gas = Action.getAllApplicableGroundedActionsFromActionList(this.actions, sh.s);
 			for(GroundedAction ga : gas){
 				double q = this.computeQ(sh, ga);
+				q = this.computeQ(sh, ga);
+				q = this.computeQ(sh, ga);
+				q = this.computeQ(sh, ga);
+				q = this.computeQ(sh, ga);
 				if(q > maxQ){
 					maxQ = q;
 				}
@@ -445,12 +453,16 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			for(ActionTransitions at : transitions){
 				
 				double policyProb = Policy.getProbOfActionGivenDistribution(at.ga, policyDistribution);
-				if(policyProb == 0.){
-					continue; //doesn't contribute
+				if(policyProb > 0.){
+					double q = this.computeQ(sh.s, at);
+					q = this.computeQ(sh.s, at);
+					q = this.computeQ(sh.s, at);
+					q = this.computeQ(sh.s, at);
+					q = this.computeQ(sh.s, at);
+					weightedQ += policyProb*q;
 				}
 				
-				double q = this.computeQ(sh.s, at);
-				weightedQ += policyProb*q;
+				
 				
 			}
 			
@@ -462,12 +474,16 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			for(GroundedAction ga : gas){
 				
 				double policyProb = Policy.getProbOfActionGivenDistribution(ga, policyDistribution);
-				if(policyProb == 0.){
-					continue; //doesn't contribute
+				if(policyProb > 0.){
+					double q = this.computeQ(sh, ga);
+					q= this.computeQ(sh, ga);
+					q=this.computeQ(sh, ga);
+					q = this.computeQ(sh, ga);
+					q = this.computeQ(sh, ga);
+					weightedQ += policyProb*q;
 				}
 				
-				double q = this.computeQ(sh, ga);
-				weightedQ += policyProb*q;
+				
 			}
 			
 		}
@@ -522,8 +538,7 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			}
 			
 		}
-		
-		
+
 		return q;
 	}
 	
@@ -568,7 +583,7 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
 			}
 			
 		}
-		
+	
 		return q;
 	}
 	

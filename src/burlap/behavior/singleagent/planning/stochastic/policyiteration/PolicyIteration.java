@@ -32,10 +32,10 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 	 * When the maximum change between policy evaluations is smaller than this value, planning will terminate.
 	 */
 	protected double												maxPIDelta;
+	
+	public double													lastPIDelta=0.;
 
-	public double lastPIDelta = 0.;
-
-
+	
 	/**
 	 * When the number of policy evaluation iterations exceeds this value, policy evaluation will terminate.
 	 */
@@ -50,7 +50,7 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 	/**
 	 * The current policy to be evaluated
 	 */
-	protected Policy 												evaluativePolicy;
+	public Policy 												evaluativePolicy;
 	
 	
 	/**
@@ -62,7 +62,7 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 	/**
 	 * The total number of policy iterations performed
 	 */
-	protected int													totalPolicyIterations = 0;
+	public int													totalPolicyIterations = 0;
 
 	/**
 	 * The total number of value iterations used to evaluated policies performed
@@ -171,19 +171,22 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 
 		int iterations = 0;
 		this.initializeOptionsForExpectationComputations();
-		if(this.performReachabilityFrom(initialState)){
+		if(this.performReachabilityFrom(initialState)||true){
 			
 			double delta;
 			do{
 				delta = this.evaluatePolicy();
 				iterations++;
 				this.evaluativePolicy = new GreedyQPolicy(this.getCopyOfValueFunction());
+				this.lastPIDelta = delta;
 			}while(delta > this.maxPIDelta && iterations < maxPolicyIterations);
-			this.lastPIDelta = delta;
+			
 		}
 
 		DPrint.cl(this.debugCode, "Total policy iterations: " + iterations);
+
 		this.totalPolicyIterations += iterations;
+
 		return (GreedyQPolicy)this.evaluativePolicy;
 
 	}
@@ -294,11 +297,19 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
 						openList.offer(tsh);
 					}
 				}
+				
 			}
+			
+			
 		}
 		
 //		DPrint.cl(this.debugCode, "Finished reachability analysis; # states: " + mapToStateIndex.size());
+		
 		this.foundReachableStates = true;
+		
 		return true;
+		
 	}
+
+	
 }
