@@ -1,0 +1,167 @@
+diff --git a/README.md b/README.md
+index cad9d31..32335e2 100644
+--- a/README.md
++++ b/README.md
+@@ -14,6 +14,8 @@ You can use basicgrid.html in a browser to build up new worlds, which you can cu
+ 
+ I've included the awesome original gridworld.html by Joshua Kaelin in case you want to expand past the basics.
+ 
++## Parameters
++burlap.assignment4.util.AnalysisRunner where QLearning is created has gamma, qinit and learning rate.
+ ## Previous readme
+ 
+ Greetings! The purpose of this readme file is to offer the reader the steps required to make use of this BURLAP machine learning package with several of my own custom classes (included) and Eclipse (not included). This readme is split by the different Markov Decision Processes that were required for completion of the assignment. The instructions below will assume that you have already successfully downloaded and opened Eclipse.
+diff --git a/src/burlap/behavior/singleagent/planning/stochastic/DynamicProgramming.java b/src/burlap/behavior/singleagent/planning/stochastic/DynamicProgramming.java
+index 667c221..940c037 100644
+--- a/src/burlap/behavior/singleagent/planning/stochastic/DynamicProgramming.java
++++ b/src/burlap/behavior/singleagent/planning/stochastic/DynamicProgramming.java
+@@ -393,6 +393,10 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
+ 			List<ActionTransitions> transitions = this.getActionsTransitions(sh);
+ 			for(ActionTransitions at : transitions){
+ 				double q = this.computeQ(sh.s, at);
++				q = this.computeQ(sh.s, at);
++				q = this.computeQ(sh.s, at);
++				q = this.computeQ(sh.s, at);
++				q = this.computeQ(sh.s, at);
+ 				if(q > maxQ){
+ 					maxQ = q;
+ 				}				
+@@ -405,6 +409,10 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
+ 			List<GroundedAction> gas = Action.getAllApplicableGroundedActionsFromActionList(this.actions, sh.s);
+ 			for(GroundedAction ga : gas){
+ 				double q = this.computeQ(sh, ga);
++				q = this.computeQ(sh, ga);
++				q = this.computeQ(sh, ga);
++				q = this.computeQ(sh, ga);
++				q = this.computeQ(sh, ga);
+ 				if(q > maxQ){
+ 					maxQ = q;
+ 				}
+@@ -445,12 +453,16 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
+ 			for(ActionTransitions at : transitions){
+ 				
+ 				double policyProb = Policy.getProbOfActionGivenDistribution(at.ga, policyDistribution);
+-				if(policyProb == 0.){
+-					continue; //doesn't contribute
+-				}
+-				
++				if(policyProb > 0.){
+ 					double q = this.computeQ(sh.s, at);
++					q = this.computeQ(sh.s, at);
++					q = this.computeQ(sh.s, at);
++					q = this.computeQ(sh.s, at);
++					q = this.computeQ(sh.s, at);
+ 					weightedQ += policyProb*q;
++				}
++				
++				
+ 				
+ 			}
+ 			
+@@ -462,14 +474,18 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
+ 			for(GroundedAction ga : gas){
+ 				
+ 				double policyProb = Policy.getProbOfActionGivenDistribution(ga, policyDistribution);
+-				if(policyProb == 0.){
+-					continue; //doesn't contribute
+-				}
+-				
++				if(policyProb > 0.){
+ 					double q = this.computeQ(sh, ga);
++					q= this.computeQ(sh, ga);
++					q=this.computeQ(sh, ga);
++					q = this.computeQ(sh, ga);
++					q = this.computeQ(sh, ga);
+ 					weightedQ += policyProb*q;
+ 				}
+ 				
++				
++			}
++			
+ 		}
+ 		
+ 		
+@@ -523,7 +539,6 @@ public class DynamicProgramming extends MDPSolver implements ValueFunction, QFun
+ 			
+ 		}
+ 
+-		
+ 		return q;
+ 	}
+ 	
+diff --git a/src/burlap/behavior/singleagent/planning/stochastic/policyiteration/PolicyIteration.java b/src/burlap/behavior/singleagent/planning/stochastic/policyiteration/PolicyIteration.java
+index a5b90e9..a96b438 100644
+--- a/src/burlap/behavior/singleagent/planning/stochastic/policyiteration/PolicyIteration.java
++++ b/src/burlap/behavior/singleagent/planning/stochastic/policyiteration/PolicyIteration.java
+@@ -33,7 +33,7 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
+ 	 */
+ 	protected double												maxPIDelta;
+ 	
+-	public double lastPIDelta = 0.;
++	public double													lastPIDelta=0.;
+ 
+ 	
+ 	/**
+@@ -50,7 +50,7 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
+ 	/**
+ 	 * The current policy to be evaluated
+ 	 */
+-	protected Policy 												evaluativePolicy;
++	public Policy 												evaluativePolicy;
+ 	
+ 	
+ 	/**
+@@ -62,7 +62,7 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
+ 	/**
+ 	 * The total number of policy iterations performed
+ 	 */
+-	protected int													totalPolicyIterations = 0;
++	public int													totalPolicyIterations = 0;
+ 
+ 	/**
+ 	 * The total number of value iterations used to evaluated policies performed
+@@ -171,19 +171,22 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
+ 
+ 		int iterations = 0;
+ 		this.initializeOptionsForExpectationComputations();
+-		if(this.performReachabilityFrom(initialState)){
++		if(this.performReachabilityFrom(initialState)||true){
+ 			
+ 			double delta;
+ 			do{
+ 				delta = this.evaluatePolicy();
+ 				iterations++;
+ 				this.evaluativePolicy = new GreedyQPolicy(this.getCopyOfValueFunction());
+-			}while(delta > this.maxPIDelta && iterations < maxPolicyIterations);
+ 				this.lastPIDelta = delta;
++			}while(delta > this.maxPIDelta && iterations < maxPolicyIterations);
++			
+ 		}
+ 
+ 		DPrint.cl(this.debugCode, "Total policy iterations: " + iterations);
++
+ 		this.totalPolicyIterations += iterations;
++
+ 		return (GreedyQPolicy)this.evaluativePolicy;
+ 
+ 	}
+@@ -294,11 +297,19 @@ public class PolicyIteration extends DynamicProgramming implements Planner {
+ 						openList.offer(tsh);
+ 					}
+ 				}
++				
+ 			}
++			
++			
+ 		}
+ 		
+ //		DPrint.cl(this.debugCode, "Finished reachability analysis; # states: " + mapToStateIndex.size());
++		
+ 		this.foundReachableStates = true;
++		
+ 		return true;
++		
+ 	}
++
++	
+ }
