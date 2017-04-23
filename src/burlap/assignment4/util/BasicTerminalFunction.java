@@ -9,7 +9,7 @@ public class BasicTerminalFunction implements TerminalFunction {
 
 	GridMap gridMap;
 
-	public BasicTerminalFunction(GridMap gridMap){
+	public BasicTerminalFunction(GridMap gridMap) {
 		this.gridMap = gridMap;
 	}
 
@@ -22,7 +22,8 @@ public class BasicTerminalFunction implements TerminalFunction {
 		int ay = agent.getIntValForAttribute(BasicGridWorld.ATTY);
 
 		// are they at goal location?
-		if(this.gridMap.getMap()[ax][ay] == GridMap.GOOD_END_POSITION){
+		if (this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_GOAL_LOCATION_VALUE
+				|| this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_TRAP_LOCATION_VALUE) {
 			return true;
 		}
 

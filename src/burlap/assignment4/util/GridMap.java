@@ -17,10 +17,12 @@ public class GridMap {
     
     public Position startPosition;
     public ArrayList<Position> endPositions;
-    
-    final public static int START_POSITION = 2;
-    final public static int GOOD_END_POSITION = 3;
-    final public static int WALL_POSITION = 1; 
+
+    final public static int WALL_LOCATION_VALUE = 1; 
+    final public static int AGENT_START_LOCATION_VALUE = 2;
+    final public static int TERMINAL_GOAL_LOCATION_VALUE = 3;
+    final public static int TERMINAL_TRAP_LOCATION_VALUE = 4;
+    final public static int TEMPORARY_TRAP_LOCATION_VALUE = 5;
 
     public GridMap(String name, int[][] map, Position startPosition, ArrayList<Position> endPositions) {
         this.name = name;
@@ -74,7 +76,7 @@ public class GridMap {
         int height = map.length;
         int width = map[0].length;
         
-        Position startPosition = new Position(0, 0);
+        Position startPosition = null;
         ArrayList<Position> endPositions = new ArrayList<Position>();
         		
         int[][] grid = new int[width][height];
@@ -85,11 +87,11 @@ public class GridMap {
                 // int val = Integer.parseInt(map[height - 1 - x][y]); // Square BURLAP coordinate system from Juan Jose.
                 int val = Integer.parseInt(map[y][x]); // Rectangle safe BURLAP coordinate system.
                 
-                if(val == START_POSITION){
+                if(val == AGENT_START_LOCATION_VALUE){
                 	startPosition = new Position(x, height - 1 - y);
                 	//val = 0;
                 }
-                if(val == GOOD_END_POSITION){
+                if(val == TERMINAL_GOAL_LOCATION_VALUE || val == TERMINAL_TRAP_LOCATION_VALUE){
                 	endPositions.add(new Position(x, height - 1 - y));
                 	//val = 0;
                 }
@@ -97,8 +99,19 @@ public class GridMap {
             }
         }
         
+        //just in case there is no start position
+        if(startPosition == null){
+        	int startX = 0;
+        	int startY = 0;
+        	startPosition = new Position(startX, startY);
+        	grid[startX][height -1 - startY] = GridMap.AGENT_START_LOCATION_VALUE;
+        }
+        //just in case there is no end position
         if(endPositions.isEmpty()){
-        	endPositions.add(new Position(width - 1, height - 1));
+        	int endX = width - 1;
+        	int endY = height - 1;
+        	endPositions.add(new Position(endX, endY));
+        	grid[endX][height -1 - endY] = GridMap.TERMINAL_GOAL_LOCATION_VALUE;
         }
 
         return new GridMap(null, grid, startPosition, endPositions);

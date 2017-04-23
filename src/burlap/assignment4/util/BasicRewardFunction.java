@@ -23,8 +23,14 @@ public class BasicRewardFunction implements RewardFunction {
 		int ay = agent.getIntValForAttribute(BasicGridWorld.ATTY);
 
 		// are they at goal location?
-		if (this.gridMap.getMap()[ax][ay] == GridMap.GOOD_END_POSITION) {
+		if (this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_GOAL_LOCATION_VALUE) {
 			return this.gridMap.getSize()*2;
+		}
+		else if (this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_TRAP_LOCATION_VALUE) {
+			return -this.gridMap.getSize()*2;
+		}
+		else if (this.gridMap.getMap()[ax][ay] == GridMap.TEMPORARY_TRAP_LOCATION_VALUE) {
+			return -this.gridMap.getSize();
 		}
 
 		return -1;

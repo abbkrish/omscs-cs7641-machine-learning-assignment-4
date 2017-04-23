@@ -128,7 +128,7 @@ public class Movement extends SimpleAction implements FullActionModel {
 
 		//make sure new position is valid (not a wall or off bounds)
 		if(nx < 0 || nx >= width || ny < 0 || ny >= height ||
-				this.map[nx][ny] == GridMap.WALL_POSITION){
+				this.map[nx][ny] == GridMap.WALL_LOCATION_VALUE){
 			nx = curX;
 			ny = curY;
 		}

@@ -6,7 +6,7 @@ import burlap.assignment4.util.GridMap;
 import burlap.assignment4.util.LocationPainter;
 import burlap.assignment4.util.Movement;
 import burlap.assignment4.util.Position;
-import burlap.assignment4.util.WallPainter;
+import burlap.assignment4.util.WallAndTempTrapPainter;
 import burlap.oomdp.auxiliary.DomainGenerator;
 import burlap.oomdp.core.Attribute;
 import burlap.oomdp.core.Domain;
@@ -92,7 +92,7 @@ public class BasicGridWorld implements DomainGenerator {
 
 	public StateRenderLayer getStateRenderLayer() {
 		StateRenderLayer rl = new StateRenderLayer();
-		rl.addStaticPainter(new WallPainter(this.gridMap.getMap()));
+		rl.addStaticPainter(new WallAndTempTrapPainter(this.gridMap.getMap()));
 		rl.addObjectClassPainter(CLASSLOCATION, new LocationPainter(this.gridMap.getMap()));
 		rl.addObjectClassPainter(CLASSAGENT, new AgentPainter(this.gridMap.getMap()));
 
