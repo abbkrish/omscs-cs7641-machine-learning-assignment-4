@@ -14,21 +14,20 @@ public class EasyGridWorldLauncher {
 	private static boolean visualizeInitialGridWorld = true; //Loads a GUI with the agent, walls, and goal
 	
 	//runValueIteration, runPolicyIteration, and runQLearning indicate which algorithms will run in the experiment
-	private static boolean runValueIteration = true; 
+	private static boolean runValueIteration = true;
 	private static boolean runPolicyIteration = true;
 	private static boolean runQLearning = true;
 
 	//showValueIterationPolicyMap, showPolicyIterationPolicyMap, and showQLearningPolicyMap will open a GUI
 	//you can use to visualize the policy maps. Consider only having one variable set to true at a time
 	//since the pop-up window does not indicate what algorithm was used to generate the map.
-	private static boolean showValueIterationPolicyMap = true; 
+	private static boolean showValueIterationPolicyMap = true;
 	private static boolean showPolicyIterationPolicyMap = true;
 	private static boolean showQLearningPolicyMap = true;
 
 	private static Integer MAX_ITERATIONS = 200;
 	private static Integer NUM_INTERVALS = 200;
 	private static Integer MAX_STEPS = 50000; // Stop stuck policies from causing an infinite loop and crashing the JVM.
-
 	protected static String title = "Easy Grid World";
 
 	protected static int[][] userMap = new int[][] { 
@@ -76,7 +75,7 @@ public class EasyGridWorldLauncher {
 
 		State initialState = gen.getExampleState(domain);
 
-		RewardFunction rf = new BasicRewardFunction(grid.endX, grid.endY, grid.getSize() * 2); //Goal is at the top right grid
+		RewardFunction rf = new BasicRewardFunction(grid.endX, grid.endY, 1); //Goal is at the top right grid
 		TerminalFunction tf = new BasicTerminalFunction(grid.endX, grid.endY); //Goal is at the top right grid
 
 		SimulatedEnvironment env = new SimulatedEnvironment(domain, rf, tf, initialState);

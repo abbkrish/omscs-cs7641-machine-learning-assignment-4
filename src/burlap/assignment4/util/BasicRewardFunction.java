@@ -31,6 +31,6 @@ public class BasicRewardFunction implements RewardFunction {
 			return this.reward;
 		}
 
-		return -1;
+		return -0.04;
 	}
 }

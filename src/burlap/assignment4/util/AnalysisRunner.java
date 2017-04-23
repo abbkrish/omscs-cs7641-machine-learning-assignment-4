@@ -57,7 +57,7 @@ public class AnalysisRunner {
 					tf,
 					0.99,
 					hashingFactory,
-					0.001, numIterations); //Added a very high delta number in order to guarantee that value iteration occurs the max number of iterations
+					-1, numIterations); //Added a very high delta number in order to guarantee that value iteration occurs the max number of iterations
 										   //for comparison with the other algorithms.
 	
 			// run planning from our initial state
@@ -97,9 +97,8 @@ public class AnalysisRunner {
 					tf,
 					0.99,
 					hashingFactory,
-					0.001,
-					//1,
-					20, // If you look at the older code, the second last arg to the
+					-1,
+					20, //If you look at the older code, the second last arg to the
 					// constructor of policy iteration is set to 1. It really ought to be 10 or 20 in
 					// the literature -- jontay ( alyssa -- changing this to 20)
 					numIterations);
@@ -154,12 +153,12 @@ public class AnalysisRunner {
 			domain,
 			0.99, // Gamma - discount rate.
 			hashingFactory,
-			1.,   // Initial Q value.
-			0.2,  // Learning rate.
+			0.99,   // Initial Q value.
+			0.99,  // Learning rate.
 			MAX_STEPS);
 		// DecayingEpsilonGreedy epsilonPolicy = new DecayingEpsilonGreedy(agent, 0.5, 0.999);
-		DecayingEpsilonGreedy epsilonPolicy = new DecayingEpsilonGreedy(agent, 0.5, 0.9999);
-		// EpsilonGreedy epsilonPolicy = new EpsilonGreedy(agent, 0.1);
+		//DecayingEpsilonGreedy epsilonPolicy = new DecayingEpsilonGreedy(agent, 0.5, 0.9999);
+		EpsilonGreedy epsilonPolicy = new EpsilonGreedy(agent, 0.1);
 		agent.setLearningPolicy(epsilonPolicy);
 
 		int increment = MAX_ITERATIONS/NUM_INTERVALS;
