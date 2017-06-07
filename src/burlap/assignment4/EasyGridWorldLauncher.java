@@ -29,60 +29,48 @@ public class EasyGridWorldLauncher {
 	private static Integer NUM_INTERVALS = 200;
 	private static Integer MAX_STEPS = 50000; // Stop stuck policies from causing an infinite loop and crashing the JVM.
 
-	protected static String title = "Easy Grid World";
-
-	protected static int[][] userMap = new int[][] { 
-			{ 0, 0, 0, 0, 0},
-			{ 0, 1, 1, 1, 0},
-            { 0, 1, 1, 1, 0},
-			{ 1, 0, 1, 1, 0},
-			{ 0, 0, 0, 0, 0}, };
+	protected static String title;
+	static String file = "testworlds/easy.csv";
 
 //	private static Integer mapLen = map.length-1;
 
 	public static void main(String[] args) {
-	    GridMap grid = null;
 	    if (args.length > 0) {
-	        try {
-                grid = GridMap.LoadMap(args[0]);
-                title = "'" + args[0] + "' Grid World";
-				if (args.length > 1) {
-					MAX_ITERATIONS = NUM_INTERVALS = Integer.parseInt(args[1]);
-				}
-				if (args.length > 2) {
-					MAX_STEPS = Integer.parseInt(args[2]);
-				}
-            } catch (Exception e) {
-	            System.out.println("Error: could not load map '" + args[0] + "'.\n");
-	            e.printStackTrace(System.out);
-            }
+	    	file = args[0];
+			if (args.length > 1) {
+				MAX_ITERATIONS = NUM_INTERVALS = Integer.parseInt(args[1]);
+			}
+			if (args.length > 2) {
+				MAX_STEPS = Integer.parseInt(args[2]);
+			}
         }
-
-        if (grid == null) {
-            System.out.println("/////Running default hardcoded map./////\n");
-            // convert to BURLAP indexing
-            int[][] map = MapPrinter.mapToMatrix(userMap);
-            int goalX = map.length-1;
-            int goalY = map[0].length-1;
-            grid = new GridMap(title, map, 0, 0, goalX, goalY);
+        
+        title = "'" + file + "' Grid World";
+	    
+        GridMap grid = null;
+        try {
+            grid = GridMap.LoadMap(file);
+        } catch (Exception e) {
+            System.out.println("Error: could not load map '" + args[0] + "'.\n");
+            e.printStackTrace(System.out);
         }
 
         runGridWorld(grid);
 	}
 
-	private static void runGridWorld(GridMap grid) {
-		BasicGridWorld gen = new BasicGridWorld(grid.getMap(), grid.endX, grid.endY, grid.startX, grid.startY);
+	private static void runGridWorld(GridMap gridMap) {
+		BasicGridWorld gen = new BasicGridWorld(gridMap);
 		Domain domain = gen.generateDomain();
 
 		State initialState = gen.getExampleState(domain);
 
-		RewardFunction rf = new BasicRewardFunction(grid.endX, grid.endY, grid.getSize() * 2); //Goal is at the top right grid
-		TerminalFunction tf = new BasicTerminalFunction(grid.endX, grid.endY); //Goal is at the top right grid
+		RewardFunction rf = new BasicRewardFunction(gridMap);
+		TerminalFunction tf = new BasicTerminalFunction(gridMap);
 
 		SimulatedEnvironment env = new SimulatedEnvironment(domain, rf, tf, initialState);
 		//Print the map that is being analyzed
 		System.out.println("\n|***| " + title + " Analysis |***|\n\n");
-		MapPrinter.printMap(MapPrinter.matrixToMap(grid.getMap()));
+		MapPrinter.printMap(MapPrinter.matrixToMap(gridMap.getMap()));
 		
 		if (visualizeInitialGridWorld) {
 			visualizeInitialGridWorld(domain, gen, env);
@@ -90,13 +78,13 @@ public class EasyGridWorldLauncher {
 
 		AnalysisRunner runner = new AnalysisRunner(MAX_ITERATIONS, NUM_INTERVALS, MAX_STEPS);
 		if(runValueIteration){
-			runner.runValueIteration(gen,domain,initialState, rf, tf, showValueIterationPolicyMap, grid.name);
+			runner.runValueIteration(gen,domain,initialState, rf, tf, showValueIterationPolicyMap, gridMap.name);
 		}
 		if(runPolicyIteration){
-			runner.runPolicyIteration(gen,domain,initialState, rf, tf, showPolicyIterationPolicyMap, grid.name);
+			runner.runPolicyIteration(gen,domain,initialState, rf, tf, showPolicyIterationPolicyMap, gridMap.name);
 		}
 		if(runQLearning){
-			runner.runQLearning(gen,domain,initialState, rf, tf, env, showQLearningPolicyMap, grid.name);
+			runner.runQLearning(gen,domain,initialState, rf, tf, env, showQLearningPolicyMap, gridMap.name);
 		}
 		// AnalysisAggregator.printAggregateAnalysis();
 	}

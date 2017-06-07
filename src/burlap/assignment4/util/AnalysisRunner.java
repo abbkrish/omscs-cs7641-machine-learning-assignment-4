@@ -1,7 +1,6 @@
 package burlap.assignment4.util;
 
 import burlap.assignment4.BasicGridWorld;
-import burlap.behavior.policy.EpsilonGreedy;
 import burlap.behavior.policy.Policy;
 import burlap.behavior.singleagent.EpisodeAnalysis;
 import burlap.behavior.singleagent.auxiliary.StateReachability;
@@ -74,7 +73,7 @@ public class AnalysisRunner {
 //		Visualizer v = gen.getVisualizer();
 //		new EpisodeSequenceVisualizer(v, domain, Arrays.asList(ea));
 		// AnalysisAggregator.printValueIterationResults();
-		MapPrinter.printPolicyMap(vi.getAllStates(), p, gen.getMap());
+		MapPrinter.printPolicyMap(vi.getAllStates(), p, gen.getGridMap().getMap());
 		System.out.println("\n\n");
 		AnalysisAggregator.writeValueIterationToCsv(name + "_valueiteration_results" + MAX_ITERATIONS + ".csv");
 		if(showPolicyMap){
@@ -119,7 +118,7 @@ public class AnalysisRunner {
 //		new EpisodeSequenceVisualizer(v, domain, Arrays.asList(ea));
 		// AnalysisAggregator.printPolicyIterationResults();
 
-		MapPrinter.printPolicyMap(getAllStates(domain,rf,tf,initialState), p, gen.getMap());
+		MapPrinter.printPolicyMap(getAllStates(domain,rf,tf,initialState), p, gen.getGridMap().getMap());
 		System.out.println("\n\n");
 
 		//visualize the value function and policy.
@@ -178,7 +177,7 @@ public class AnalysisRunner {
 			AnalysisAggregator.addQLearningDecayedEpsilon(epsilonPolicy.getEpsilon());
 		}
 		// AnalysisAggregator.printQLearningResults();
-		MapPrinter.printPolicyMap(getAllStates(domain,rf,tf,initialState), p, gen.getMap());
+		MapPrinter.printPolicyMap(getAllStates(domain,rf,tf,initialState), p, gen.getGridMap().getMap());
 		System.out.println("\n\n");
 		AnalysisAggregator.writeQLearningToCsv(name + "_qlearner_results" + MAX_ITERATIONS + ".csv");
 

@@ -2,9 +2,11 @@ package burlap.assignment4;
 
 import burlap.assignment4.util.AgentPainter;
 import burlap.assignment4.util.AtLocation;
+import burlap.assignment4.util.GridMap;
 import burlap.assignment4.util.LocationPainter;
 import burlap.assignment4.util.Movement;
-import burlap.assignment4.util.WallPainter;
+import burlap.assignment4.util.Position;
+import burlap.assignment4.util.WallAndTempTrapPainter;
 import burlap.oomdp.auxiliary.DomainGenerator;
 import burlap.oomdp.core.Attribute;
 import burlap.oomdp.core.Domain;
@@ -33,33 +35,22 @@ public class BasicGridWorld implements DomainGenerator {
 	public static final String PFAT = "at";
 
 	// ordered so first dimension is x
-	protected int[][] map ;
-	protected static int goalx;
-	protected static int goaly;
-	protected static int agentx;
-	protected static int agenty;
+	protected GridMap gridMap;
 
-	public BasicGridWorld(int[][] map,int goalx, int goaly, int agentx, int agenty){
-		this.map = map;
-		this.goalx = goalx;
-		this.goaly = goaly;
-		this.agentx = agentx;
-		this.agenty = agenty;
+	public BasicGridWorld(GridMap gridMap) {
+		this.gridMap = gridMap;
 	}
-
 
 	@Override
 	public Domain generateDomain() {
 
 		SADomain domain = new SADomain();
 
-		Attribute xatt = new Attribute(domain, ATTX,
-				Attribute.AttributeType.INT);
-		xatt.setLims(0, this.map.length - 1);
+		Attribute xatt = new Attribute(domain, ATTX, Attribute.AttributeType.INT);
+		xatt.setLims(0, this.gridMap.getMap().length - 1);
 
-		Attribute yatt = new Attribute(domain, ATTY,
-				Attribute.AttributeType.INT);
-		yatt.setLims(0, map[0].length - 1);
+		Attribute yatt = new Attribute(domain, ATTY, Attribute.AttributeType.INT);
+		yatt.setLims(0, this.gridMap.getMap()[0].length - 1);
 
 		ObjectClass agentClass = new ObjectClass(domain, CLASSAGENT);
 		agentClass.addAttribute(xatt);
@@ -69,10 +60,10 @@ public class BasicGridWorld implements DomainGenerator {
 		locationClass.addAttribute(xatt);
 		locationClass.addAttribute(yatt);
 
-		new Movement(ACTIONNORTH, domain, 0, map);
-		new Movement(ACTIONSOUTH, domain, 1, map);
-		new Movement(ACTIONEAST, domain, 2, map);
-		new Movement(ACTIONWEST, domain, 3, map);
+		new Movement(ACTIONNORTH, domain, 0, this.gridMap.getMap());
+		new Movement(ACTIONSOUTH, domain, 1, this.gridMap.getMap());
+		new Movement(ACTIONEAST, domain, 2, this.gridMap.getMap());
+		new Movement(ACTIONWEST, domain, 3, this.gridMap.getMap());
 
 		new AtLocation(domain);
 
@@ -81,27 +72,29 @@ public class BasicGridWorld implements DomainGenerator {
 
 	public State getExampleState(Domain domain) {
 		State s = new MutableState();
-		ObjectInstance agent = new MutableObjectInstance(
-				domain.getObjectClass(CLASSAGENT), "agent0");
-		agent.setValue(ATTX, this.agentx);
-		agent.setValue(ATTY, this.agenty);
 
-		ObjectInstance location = new MutableObjectInstance(
-				domain.getObjectClass(CLASSLOCATION), "location0");
-		location.setValue(ATTX, goalx);
-		location.setValue(ATTY, goaly);
-
+		ObjectInstance agent = new MutableObjectInstance(domain.getObjectClass(CLASSAGENT), "agent0");
+		agent.setValue(ATTX, this.gridMap.startPosition.x);
+		agent.setValue(ATTY, this.gridMap.startPosition.y);
 		s.addObject(agent);
-		s.addObject(location);
 
+		int endPosCounter = 0;
+		for (Position endPos : this.gridMap.endPositions) {
+			ObjectInstance location = new MutableObjectInstance(domain.getObjectClass(CLASSLOCATION),
+					"location" + endPosCounter);
+			location.setValue(ATTX, endPos.x);
+			location.setValue(ATTY, endPos.y);
+			s.addObject(location);
+			endPosCounter++;
+		}
 		return s;
 	}
 
 	public StateRenderLayer getStateRenderLayer() {
 		StateRenderLayer rl = new StateRenderLayer();
-		rl.addStaticPainter(new WallPainter(map));
-		rl.addObjectClassPainter(CLASSLOCATION, new LocationPainter(map));
-		rl.addObjectClassPainter(CLASSAGENT, new AgentPainter(map));
+		rl.addStaticPainter(new WallAndTempTrapPainter(this.gridMap.getMap()));
+		rl.addObjectClassPainter(CLASSLOCATION, new LocationPainter(this.gridMap.getMap()));
+		rl.addObjectClassPainter(CLASSAGENT, new AgentPainter(this.gridMap.getMap()));
 
 		return rl;
 	}
@@ -110,14 +103,12 @@ public class BasicGridWorld implements DomainGenerator {
 		return new Visualizer(this.getStateRenderLayer());
 	}
 
-	public int[][] getMap() {
-		return map;
+	public GridMap getGridMap() {
+		return this.gridMap;
 	}
 
-	public void setMap(int[][] map) {
-		this.map = map;
+	public void setGridMap(GridMap gridMap) {
+		this.gridMap = gridMap;
 	}
-
-
 
 }

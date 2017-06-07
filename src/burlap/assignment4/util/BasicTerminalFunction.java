@@ -7,12 +7,10 @@ import burlap.oomdp.core.states.State;
 
 public class BasicTerminalFunction implements TerminalFunction {
 
-	int goalX;
-	int goalY;
+	GridMap gridMap;
 
-	public BasicTerminalFunction(int goalX, int goalY) {
-		this.goalX = goalX;
-		this.goalY = goalY;
+	public BasicTerminalFunction(GridMap gridMap) {
+		this.gridMap = gridMap;
 	}
 
 	@Override
@@ -24,7 +22,8 @@ public class BasicTerminalFunction implements TerminalFunction {
 		int ay = agent.getIntValForAttribute(BasicGridWorld.ATTY);
 
 		// are they at goal location?
-		if (ax == this.goalX && ay == this.goalY) {
+		if (this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_GOAL_LOCATION_VALUE
+				|| this.gridMap.getMap()[ax][ay] == GridMap.TERMINAL_TRAP_LOCATION_VALUE) {
 			return true;
 		}
 

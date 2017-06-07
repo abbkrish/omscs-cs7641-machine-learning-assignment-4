@@ -1,9 +1,6 @@
 package burlap.assignment4.util;
 
-import burlap.oomdp.core.values.DoubleArrayValue;
-
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
